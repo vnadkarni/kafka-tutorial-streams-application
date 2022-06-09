@@ -45,9 +45,11 @@ public class KafkaStreamsApplication {
 
         StreamsBuilder builder = new StreamsBuilder();
 
+        // builder.stream returns an object of KStream which is like Java Stream
+        // see https://kafka.apache.org/23/javadoc/org/apache/kafka/streams/kstream/KStream.html
         builder
             .stream(inputTopic, Consumed.with(stringSerde, stringSerde))
-            .peek((k,v) -> logger.info("Observed event: {}", v))
+            .peek((k,v) -> logger.info("Observed event: {}", v)) //like foreach()
             .mapValues(s -> s.toUpperCase())
             .peek((k,v) -> logger.info("Transformed event: {}", v))
             .to(outputTopic, Produced.with(stringSerde, stringSerde));
@@ -60,6 +62,7 @@ public class KafkaStreamsApplication {
             throw new IllegalArgumentException("This program takes one argument: the path to a configuration file.");
         }
 
+        // Load properties file into props object
         Properties props = new Properties();
         try (InputStream inputStream = new FileInputStream(args[0])) {
             props.load(inputStream);
@@ -75,6 +78,8 @@ public class KafkaStreamsApplication {
                     Arrays.asList(
                             new NewTopic(inputTopic, Optional.empty(), Optional.empty()),
                             new NewTopic(outputTopic, Optional.empty(), Optional.empty())));
+                            // NewTopic(String name, Optional<Integer> numPartitions, Optional<Short> replicationFactor)
+
 
             // Ramdomizer only used to produce sample data for this application, not typical usage
             try (Util.Randomizer rando = utility.startNewRandomizer(props, inputTopic)) {

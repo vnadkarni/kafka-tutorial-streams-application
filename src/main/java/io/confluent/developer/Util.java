@@ -38,6 +38,8 @@ public class Util implements AutoCloseable {
                 Faker faker = new Faker();
                 while (!closed) {
                     try {
+
+                        // Getting ChuckNorris facts and sending them to the topic.
                         Object result = producer.send(new ProducerRecord<>(
                                 this.topic,
                                 faker.chuckNorris().fact())).get();
@@ -56,6 +58,8 @@ public class Util implements AutoCloseable {
 
     public Randomizer startNewRandomizer(Properties producerProps, String topic) {
         Randomizer rv = new Randomizer(producerProps, topic);
+
+        // Starts a runnable thread at run()
         executorService.submit(rv);
         return rv;
     }
@@ -65,6 +69,10 @@ public class Util implements AutoCloseable {
         try (final AdminClient client = AdminClient.create(allProps)) {
             logger.info("Creating topics");
 
+
+            // createTopics creates a topic with default options
+
+            // From each topic creation, we get a future (values()) that we check for errors.
             client.createTopics(topics).values().forEach( (topic, future) -> {
                 try {
                     future.get();
