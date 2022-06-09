@@ -30,7 +30,7 @@ public class KafkaStreamsApplication {
             }
         });
 
-        streams.start();
+        streams.start(); //start running the stream topology
 
         try {
             latch.await();
@@ -53,8 +53,8 @@ public class KafkaStreamsApplication {
             .mapValues(s -> s.toUpperCase())
             .peek((k,v) -> logger.info("Transformed event: {}", v))
             .to(outputTopic, Produced.with(stringSerde, stringSerde));
-
         return builder.build();
+        // builder.built() returns an object of Topology
     }
     public static void main(String[] args) throws Exception {
 
@@ -85,7 +85,7 @@ public class KafkaStreamsApplication {
             try (Util.Randomizer rando = utility.startNewRandomizer(props, inputTopic)) {
 
                 KafkaStreams kafkaStreams = new KafkaStreams(
-                        buildTopology(inputTopic, outputTopic),
+                        buildTopology(inputTopic, outputTopic), //pass in the topology
                         props);
 
                 Runtime.getRuntime().addShutdownHook(new Thread(kafkaStreams::close));

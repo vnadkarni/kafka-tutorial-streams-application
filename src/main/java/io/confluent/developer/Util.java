@@ -39,10 +39,25 @@ public class Util implements AutoCloseable {
                 while (!closed) {
                     try {
 
-                        // Getting ChuckNorris facts and sending them to the topic.
+                        // Sending ChuckNorris facts to the topic.
                         Object result = producer.send(new ProducerRecord<>(
                                 this.topic,
                                 faker.chuckNorris().fact())).get();
+
+                    //     producer.send(new ProducerRecord<>(
+                    //         this.topic,
+                    //         faker.chuckNorris().fact()),
+                    //         (recordMetadata, exception)->{
+                    //             if (exception == null) {
+                    //                 System.out.println("Record written to offset " +
+                    //                         recordMetadata.offset() + " timestamp " +
+                    //                         recordMetadata.timestamp());
+                    //             } else {
+                    //                 System.err.println("An error occurred");
+                    //                 exception.printStackTrace(System.err);
+                    //         }
+                    // });
+                                
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
                     }

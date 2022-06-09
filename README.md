@@ -24,7 +24,7 @@ The steps below are in a slightly different order from the Tutorial on the Confl
 Install confluent CLI from here: [Install Confluent CLI](https://docs.confluent.io/confluent-cli/current/install.html#scripted-installation).
 Install to `./bin`. Don't forget to add it to the `PATH` variable. Then use the following commands to login, allow auth using api-key and secret, explore environments and clusters:
 
-`$ confluent login`
+`$ confluent login --prompt --save `
 
 `$ confluent environment list`
 
@@ -37,6 +37,10 @@ Install to `./bin`. Don't forget to add it to the `PATH` variable. Then use the 
 `$ confluent kafka cluster list`
 
 `$ confluent kafka cluster use <cluster id>`
+
+`$ confluent kafka topic consume random-strings`
+
+`$ confluent kafka topic consume tall-random-strings`
 
 ## Initialise the project
 ❷
